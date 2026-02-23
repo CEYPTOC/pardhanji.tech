@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navneet</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:black;
+color:#00ffcc;
+font-family:'Share Tech Mono', monospace;
+overflow:hidden;
+}
+
+#particles{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-2;
+}
+
+#overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+z-index:10;
+}
+
+#terminal{
+color:#00ffcc;
+font-size:18px;
+width:90%;
+max-width:600px;
+}
+
+.cursor{
+display:inline-block;
+width:10px;
+background:#00ffcc;
+animation:blink 1s infinite;
+}
+
+@keyframes blink{
+0%{opacity:0;}
+50%{opacity:1;}
+100%{opacity:0;}
+}
+
+#main{
+display:none;
+text-align:center;
+padding:100px 20px;
+}
+
+h1{
+font-family:'Orbitron', sans-serif;
+font-size:50px;
+text-shadow:0 0 20px #00ffcc;
+margin-bottom:20px;
+}
+
+.card{
+margin:20px auto;
+padding:20px;
+max-width:600px;
+border:1px solid #00ffcc;
+border-radius:15px;
+background:rgba(0,255,204,0.05);
+transition:0.5s;
+}
+
+.card:hover{
+transform:scale(1.05);
+box-shadow:0 0 40px #00ffcc;
+}
+
+a{
+display:inline-block;
+margin:10px;
+padding:10px 20px;
+border:1px solid #00ffcc;
+color:#00ffcc;
+text-decoration:none;
+border-radius:10px;
+}
+
+a:hover{
+background:#00ffcc;
+color:black;
+}
+</style>
+</head>
+
+<body>
+
+<div id="particles"></div>
+
+<div id="overlay">
+<div id="terminal">
+<span id="typing"></span><span class="cursor"></span>
+</div>
+</div>
+
+<div id="main">
+<h1>Lucifer</h1>
+
+<div class="card">
+<h2>👁 Identity</h2>
+<p>Cybersecurity Enthusiast | Digital Builder | Tech Explorer</p>
+</div>
+
+<div class="card">
+<h2>🌐 Connect</h2>
+<a href="https://instagram.com/sayari_lover01" target="_blank">Instagram</a>
+<a href="https://github.com/CEYPTOC" target="_blank">GitHub</a>
+  <a href="https://x.com/1xHP_" target="_blank">Twitter</a>
+<a href="mailto:noni@pardhanji.tech">Email</a>
+</div>
+
+</div>
+
+<audio id="bgSound" autoplay loop>
+<source src="https://assets.mixkit.co/sfx/preview/mixkit-tech-house-vibes-130.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// Typing Intro
+const text = "Initializing Secure Connection...\nAccessing pardhanji.tech...\nIdentity Verified.\nWelcome Commander.";
+let i = 0;
+function typing(){
+if(i < text.length){
+document.getElementById("typing").innerHTML += text.charAt(i);
+i++;
+setTimeout(typing, 40);
+}else{
+setTimeout(()=>{
+document.getElementById("overlay").style.display="none";
+document.getElementById("main").style.display="block";
+},1000);
+}
+}
+typing();
+
+// Voice Message
+window.speechSynthesis.onvoiceschanged = function() {
+const msg = new SpeechSynthesisUtterance("Welcome to Pardhanji secure cyber space.");
+msg.rate = 0.9;
+msg.pitch = 0.8;
+speechSynthesis.speak(msg);
+};
+
+// 3D Particle Background
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+let renderer = new THREE.WebGLRenderer({alpha:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.getElementById("particles").appendChild(renderer.domElement);
+
+let geometry = new THREE.BufferGeometry();
+let vertices = [];
+
+for (let i = 0; i < 10000; i++) {
+vertices.push(THREE.MathUtils.randFloatSpread(2000));
+vertices.push(THREE.MathUtils.randFloatSpread(2000));
+vertices.push(THREE.MathUtils.randFloatSpread(2000));
+}
+
+geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+let material = new THREE.PointsMaterial({color:0x00ffcc});
+let particles = new THREE.Points(geometry, material);
+scene.add(particles);
+
+camera.position.z = 5;
+
+function animate() {
+requestAnimationFrame(animate);
+particles.rotation.x += 0.0005;
+particles.rotation.y += 0.0005;
+renderer.render(scene, camera);
+}
+animate();
+</script>
+
+</body>
+</html>
